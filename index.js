@@ -19,7 +19,7 @@ function askForAction() {
         "QUIT",
       ],
     })
-    .then(() => {
+    .then((res) => {
       switch (res.action) {
         case "VIEW_DEPARTMENTS":
           viewDepartments();
@@ -39,22 +39,26 @@ function askForAction() {
     });
 }
 
+//The ".thens" below are only possible because we used PROMISIFY the query object in connection.js
 function viewDepartments() {
   db.getDepartments().then((results) => {
     console.table(results);
+    askForAction();
   });
 }
 
 function viewRoles() {
   db.getRoles().then((results) => {
     console.table(results);
+    askForAction();
   });
 }
 
 function viewEmployees() {
   db.getEmployees().then((results) => {
     console.table(results);
+    askForAction();
   });
 }
 
-// askForAction();
+askForAction();
