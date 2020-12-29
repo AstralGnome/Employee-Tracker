@@ -13,9 +13,9 @@ function askForAction() {
         "VIEW_DEPARTMENTS",
         "VIEW_ROLES",
         "VIEW_EMPLOYEES",
-        "ADD_DEPARTMENTS",
-        "ADD_ROLES",
-        "ADD_EMPLOYEES",
+        "ADD_DEPARTMENT",
+        "ADD_ROLE",
+        "ADD_EMPLOYEE",
         "UPDATE_EMPLOYEE_ROLES",
         "QUIT",
       ],
@@ -34,16 +34,20 @@ function askForAction() {
           viewEmployees();
           break;
 
-        case "VIEW_EMPLOYEES":
-          viewEmployees();
+        case "ADD_DEPARTMENT":
+          addDepartment();
           break;
 
-        case "VIEW_EMPLOYEES":
-          viewEmployees();
+        case "ADD_ROLE":
+          addRole();
           break;
 
-        case "VIEW_EMPLOYEES":
-          viewEmployees();
+        case "ADD_EMPLOYEE":
+          addEmployee();
+          break;
+
+        case "UPDATE_EMPLOYEE_ROLES":
+          updateEmployeeRole();
           break;
 
         case "QUIT":
@@ -77,5 +81,13 @@ function viewEmployees() {
     askForAction();
   });
 }
+
+function addDepartment() {}
+
+function addRole() {}
+
+function addEmployee() {}
+
+function updateEmployeeRole() {}
 
 askForAction();

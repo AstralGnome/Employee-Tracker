@@ -13,7 +13,8 @@ module.exports = {
     return connection.query(`SELECT e.first_name, r.title
                              FROM employee AS e
                              LEFT JOIN role AS r
-                             ON e.role_id = r.id`);
+                             ON e.role_id = r.id
+                             `);
   },
 };
 
