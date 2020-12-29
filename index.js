@@ -3,6 +3,25 @@ const cTable = require("console.table");
 const db = require("./db");
 const connection = require("./db/connection");
 
+const logo = require("asciiart-logo");
+console.log(
+  logo({
+    name: "Employee Tracker",
+    font: "Cybermedium",
+    lineChars: 10,
+    padding: 2,
+    margin: 3,
+    borderColor: "bold-magenta",
+    logoColor: "bold-cyan",
+    textColor: "white",
+  })
+    .emptyLine()
+    .right("V 0.1")
+    .emptyLine()
+    .left("Now you can monitor, alter, and replace employees, like cogs in a machine.")
+    .render()
+);
+
 function askForAction() {
   inquirer
     .prompt({
