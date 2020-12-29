@@ -1,19 +1,34 @@
 const connection = require("./connection");
 
 module.exports = {
-  getAll(table) {
-    return connection.query("SELECT * FROM ??", table);
-  },
-
   getDepartments() {
-    return this.getDepartments("department");
+    return connection.query(`SELECT * FROM department`);
   },
 
   getRoles() {
-    return this.getAll("role");
+    return connection.query(`SELECT * FROM role`);
   },
 
   getEmployees() {
-    return this.getAll("employee");
+    return connection.query(`SELECT e.first_name, r.title
+                             FROM employee AS e
+                             LEFT JOIN role AS r
+                             ON e.role_id = r.id`);
   },
 };
+
+// getAll(table) {
+//   return connection.query("SELECT * FROM ??", table);
+// },
+
+// getDepartments() {
+//   return this.getAll("department");
+// },
+
+// getRoles() {
+//   return this.getAll("role");
+// },
+
+// getEmployees() {
+//   return this.getAll("employee");
+// },

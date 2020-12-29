@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+require("console.table");
 const db = require("./db");
 const connection = require("./db/connection");
 
@@ -20,7 +21,7 @@ function askForAction() {
       ],
     })
     .then((res) => {
-      switch (res.action) {
+      switch (res.initialAction) {
         case "VIEW_DEPARTMENTS":
           viewDepartments();
           break;
@@ -31,6 +32,22 @@ function askForAction() {
 
         case "VIEW_EMPLOYEES":
           viewEmployees();
+          break;
+
+        case "VIEW_EMPLOYEES":
+          viewEmployees();
+          break;
+
+        case "VIEW_EMPLOYEES":
+          viewEmployees();
+          break;
+
+        case "VIEW_EMPLOYEES":
+          viewEmployees();
+          break;
+
+        case "QUIT":
+          connection.end();
           break;
 
         default:
