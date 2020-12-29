@@ -82,11 +82,44 @@ function viewEmployees() {
   });
 }
 
-function addDepartment() {}
+function addDepartment() {
+  inquirer.prompt({
+    message: "Choose a name for the new department.",
+    name: "newDepartment",
+    type: "input",
+  });
+}
 
-function addRole() {}
+function addRole() {
+  db.getDepartments().then((departments) => {
+    console.log(departments);
+    const departmentChoices = departments.map((department) => ({
+      value: department.id,
+      name: department.name,
+    }));
 
-function addEmployee() {}
+    inquirer
+      .prompt([
+        {
+          message: "To which department would you like to add a role?",
+          type: "list",
+          name: "department_id",
+          choices: departmentChoices,
+        },
+      ])
+      .then((res) => {
+        console.log(res);
+      });
+  });
+}
+
+function addEmployee() {
+  inquirer.prompt({
+    message: "What is the name of the new employee you have decided to hire?",
+    name: "newHire",
+    type: "input",
+  });
+}
 
 function updateEmployeeRole() {}
 

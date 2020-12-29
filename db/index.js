@@ -16,6 +16,10 @@ module.exports = {
                              ON e.role_id = r.id
                              `);
   },
+
+  insertRole(data) {
+    return connection.query(`INSERT INTO role ?`, data);
+  },
 };
 
 // getAll(table) {
