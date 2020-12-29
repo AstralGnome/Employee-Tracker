@@ -9,10 +9,11 @@ const connection = mysql.createConnection({
   database: "employees",
 });
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log("connected as id " + connection.threadId);
-});
+//Alternative connection method below. Does not do all the cool things that promisify does.
+// connection.connect((err) => {
+//   if (err) throw err;
+//   console.log("connected as id " + connection.threadId);
+// });
 
 //Setting up connection.query to use promises instead of callbacks which allows us to use the async/await syntax
 connection.query = util.promisify(connection.query);
