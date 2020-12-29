@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-require("console.table");
+const cTable = require("console.table");
 const db = require("./db");
 const connection = require("./db/connection");
 
@@ -63,21 +63,24 @@ function askForAction() {
 //The ".thens" below are only possible because we used PROMISIFY the query object in connection.js
 function viewDepartments() {
   db.getDepartments().then((results) => {
-    console.table(results);
+    let deptTable = cTable.getTable(results);
+    console.log(deptTable);
     askForAction();
   });
 }
 
 function viewRoles() {
   db.getRoles().then((results) => {
-    console.table(results);
+    let roleTable = cTable.getTable(results);
+    console.log(roleTable);
     askForAction();
   });
 }
 
 function viewEmployees() {
   db.getEmployees().then((results) => {
-    console.table(results);
+    let empTable = cTable.getTable(results);
+    console.log(empTable);
     askForAction();
   });
 }

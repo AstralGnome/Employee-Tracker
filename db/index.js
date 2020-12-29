@@ -11,10 +11,11 @@ module.exports = {
 
   getEmployees() {
     return connection.query(`SELECT e.first_name, r.title
-                             FROM employee AS e
-                             LEFT JOIN role AS r
-                             ON e.role_id = r.id
-                             `);
+                            FROM employee AS e
+                            LEFT JOIN role AS r
+                            ON e.role_id = r.id
+                            LEFT JOIN employee AS e2
+                            ON `);
   },
 
   insertRole(data) {
