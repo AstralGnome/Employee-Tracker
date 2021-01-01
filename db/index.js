@@ -2,25 +2,31 @@ const connection = require("./connection");
 
 module.exports = {
   getDepartments() {
-    return connection.query(`SELECT * FROM department`);
+    return connection.query(`SELECT department FROM department`);
   },
 
   getRoles() {
-    return connection.query(`SELECT * FROM role`);
+    return connection.query(`SELECT role FROM role`);
   },
 
   getEmployees() {
-    return connection.query(`SELECT e.first_name, r.title
+    return connection.query(`SELECT e.id, e.first_name, e.last_name, r.role, d.department, r.salary, CONCAT (e2.first_name," ",e2.last_name) AS 'manager'
                             FROM employee AS e
                             LEFT JOIN role AS r
                             ON e.role_id = r.id
                             LEFT JOIN employee AS e2
-                            ON `);
+                            ON e.manager_id = e2.id
+                            LEFT JOIN department AS d
+                            ON e.role_id = d.id`);
   },
 
-  insertRole(data) {
-    return connection.query(`INSERT INTO role ?`, data);
-  },
+  // addDepartment(answer) {
+  //   return connection.query(
+  //     `INSERT INTO role SET ?`,
+  //     { newDepartment: answer.addDepInput },
+  //       console.log("Department added successfully!")
+  //   );
+  // },
 };
 
 // getAll(table) {

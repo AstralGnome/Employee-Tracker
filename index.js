@@ -105,11 +105,23 @@ function viewEmployees() {
 }
 
 function addDepartment() {
-  inquirer.prompt({
-    message: "Choose a name for the new department.",
-    name: "newDepartment",
-    type: "input",
-  });
+  inquirer
+    .prompt({
+      message: "Create a name for the new department.",
+      name: "newDepartment",
+      type: "input",
+    })
+    .then(function (answer) {
+      connection.query(
+        `INSERT INTO department (department) VALUES ?`,
+        { new_department: answer.newDepartment },
+        function (err) {
+          if (err) throw err;
+          console.log("You successfully added a new department!");
+          viewDepartments();
+        }
+      );
+    });
 }
 
 function addRole() {
@@ -131,6 +143,7 @@ function addRole() {
       ])
       .then((res) => {
         console.log(res);
+        viewRoles();
       });
   });
 }
