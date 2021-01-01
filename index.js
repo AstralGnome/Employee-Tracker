@@ -105,23 +105,35 @@ function viewEmployees() {
 }
 
 function addDepartment() {
-  inquirer
-    .prompt({
-      message: "Create a name for the new department.",
-      name: "newDepartment",
-      type: "input",
-    })
-    .then(function (answer) {
-      connection.query(
-        `INSERT INTO department (department) VALUES ?`,
-        { new_department: answer.newDepartment },
-        function (err) {
-          if (err) throw err;
-          console.log("You successfully added a new department!");
+  connection.query("SELECT * FROM department", function (err, results) {
+    if (err) throw err;
+    inquirer
+      .prompt({
+        message: "Create a name for the new department.",
+        name: "newDepartment",
+        type: "input",
+      })
+      .then(function (answer) {
+        let newDepName = [];
+        for (let i = 0; i < results.length; i++) {
+          newDepName.push(results[i].name);
+        }
+        if (!newDepName.includes(answer.newDepartment)) {
+          connection.query(
+            `INSERT INTO department SET ?`,
+            { name: answer.newDepartment },
+            function (err) {
+              if (err) throw err;
+              console.log("\n You successfully added a new department! \n");
+              viewDepartments();
+            }
+          );
+        } else {
+          console.log("\n You UNsuccessfully added a new department! \n");
           viewDepartments();
         }
-      );
-    });
+      });
+  });
 }
 
 function addRole() {

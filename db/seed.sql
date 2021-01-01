@@ -1,13 +1,13 @@
 USE employees;
 INSERT INTO
-  department (department)
+  department (name)
 VALUES
   ("Sales"),
   ("Engineering"),
   ("Finance"),
   ("Legal");
 INSERT INTO
-  role (role, salary, department_id)
+  role (title, salary, department_id)
 VALUES
   ("Sales Lead", 100000, 1),
   ("Salesperson", 80000, 1),
