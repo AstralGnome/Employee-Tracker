@@ -17,16 +17,8 @@ module.exports = {
                             LEFT JOIN employee AS e2
                             ON e.manager_id = e2.id
                             LEFT JOIN department AS d
-                            ON e.role_id = d.id`);
+                            ON r.department_id = d.id`);
   },
-
-  // addDepartment(answer) {
-  //   return connection.query(
-  //     `INSERT INTO role SET ?`,
-  //     { newDepartment: answer.addDepInput },
-  //       console.log("Department added successfully!")
-  //   );
-  // },
 };
 
 // getAll(table) {

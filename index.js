@@ -135,37 +135,61 @@ function addDepartment() {
       });
   });
 }
-
 function addRole() {
-  db.getDepartments().then((departments) => {
-    console.log(departments);
-    const departmentChoices = departments.map((department) => ({
-      value: department.id,
-      name: department.name,
-    }));
-
+  connection.query("SELECT * FROM role", function (err, results) {
+    if (err) throw err;
     inquirer
-      .prompt([
-        {
-          message: "To which department would you like to add a role?",
-          type: "list",
-          name: "department_id",
-          choices: departmentChoices,
-        },
-      ])
-      .then((res) => {
-        console.log(res);
-        viewRoles();
+      .prompt({
+        message: "Create a name for the new Role.",
+        name: "newRole",
+        type: "input",
+      })
+      .then(function (answer) {
+        let newRoleName = [];
+        for (let i = 0; i < results.length; i++) {
+          newRoleName.push(results[i].title);
+        }
+        if (!newRoleName.includes(answer.newRole)) {
+          connection.query(`INSERT INTO role SET ?`, { title: answer.newRole }, function (err) {
+            if (err) throw err;
+            console.log("\n You successfully added a new role! \n");
+            viewRoles();
+          });
+        } else {
+          console.log("\n You UNsuccessfully added a new role! \n");
+          viewRoles();
+        }
       });
   });
 }
-
 function addEmployee() {
-  inquirer.prompt({
-    message: "What is the name of the new employee you have decided to hire?",
-    name: "newHire",
-    type: "input",
-  });
+  inquirer
+    .prompt([
+      {
+        message: "Enter the new employee's first name.",
+        name: "newFirst",
+        type: "input",
+      },
+      {
+        message: "Enter the new employee's last name.",
+        name: "newLast",
+        type: "input",
+      },
+    ])
+    .then(function (answer) {
+      connection.query(
+        `INSERT INTO employee SET ?`,
+        {
+          first_name: answer.newFirst,
+          last_name: answer.newLast,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("\n You successfully added a new employee! \n");
+          viewEmployees();
+        }
+      );
+    });
 }
 
 function updateEmployeeRole() {}
