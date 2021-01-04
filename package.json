@@ -1,6 +1,6 @@
 {
   "name": "Employee-Tracker",
-  "version": "0.1 beta",
+  "version": "1.0.0",
   "description": "An application that allows you to view, alter, and replace employees like cogs in a machine.",
   "main": "index.js",
   "scripts": {

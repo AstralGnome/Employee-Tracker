@@ -113,6 +113,7 @@ function addDepartment() {
         name: "newDepartment",
         type: "input",
       })
+      //You CAN make it so that the schema accepts unique names only.
       .then(function (answer) {
         let newDepName = [];
         for (let i = 0; i < results.length; i++) {
@@ -121,7 +122,9 @@ function addDepartment() {
         if (!newDepName.includes(answer.newDepartment)) {
           connection.query(
             `INSERT INTO department SET ?`,
-            { name: answer.newDepartment },
+            {
+              name: answer.newDepartment,
+            },
             function (err) {
               if (err) throw err;
               console.log("\n You successfully added a new department! \n");
@@ -139,22 +142,43 @@ function addRole() {
   connection.query("SELECT * FROM role", function (err, results) {
     if (err) throw err;
     inquirer
-      .prompt({
-        message: "Create a name for the new Role.",
-        name: "newRole",
-        type: "input",
-      })
+      .prompt([
+        {
+          message: "Create a name for the new position.",
+          name: "newRole",
+          type: "input",
+        },
+        {
+          message: "Choose a salary amount for the new position.",
+          name: "chosenSal",
+          type: "input",
+        },
+        {
+          message: "Choose a department for the new position.",
+          name: "depId",
+          type: "input",
+        },
+      ])
       .then(function (answer) {
         let newRoleName = [];
         for (let i = 0; i < results.length; i++) {
           newRoleName.push(results[i].title);
         }
         if (!newRoleName.includes(answer.newRole)) {
-          connection.query(`INSERT INTO role SET ?`, { title: answer.newRole }, function (err) {
-            if (err) throw err;
-            console.log("\n You successfully added a new role! \n");
-            viewRoles();
-          });
+          connection.query(
+            `INSERT INTO role SET ?`,
+            {
+              // add inquirer questions for salary and department_id
+              title: answer.newRole,
+              salary: answer.chosenSal,
+              department_id: answer.depId,
+            },
+            function (err) {
+              if (err) throw err;
+              console.log("\n You successfully added a new role! \n");
+              viewRoles();
+            }
+          );
         } else {
           console.log("\n You UNsuccessfully added a new role! \n");
           viewRoles();
@@ -163,35 +187,85 @@ function addRole() {
   });
 }
 function addEmployee() {
-  inquirer
-    .prompt([
-      {
-        message: "Enter the new employee's first name.",
-        name: "newFirst",
-        type: "input",
-      },
-      {
-        message: "Enter the new employee's last name.",
-        name: "newLast",
-        type: "input",
-      },
-    ])
-    .then(function (answer) {
-      connection.query(
-        `INSERT INTO employee SET ?`,
-        {
-          first_name: answer.newFirst,
-          last_name: answer.newLast,
-        },
-        function (err) {
-          if (err) throw err;
-          console.log("\n You successfully added a new employee! \n");
-          viewEmployees();
-        }
-      );
+  db.getRoles().then((roles) => {
+    const titleOptions = [];
+    for (let i = 0; i < roles.length; i++) {
+      titleOptions.push(`${roles[i].title} ${roles[i].id}`);
+    }
+    db.getEmployees().then((employees) => {
+      const manOptions = [];
+      for (let i = 0; i < employees.length; i++) {
+        manOptions.push(`${employees[i].first_name} ${employees[i].last_name} ${employees[i].id}`);
+      }
+
+      inquirer
+        .prompt([
+          {
+            message: "Enter the new employee's first name.",
+            name: "newFirst",
+            type: "input",
+          },
+          {
+            message: "Enter the new employee's last name.",
+            name: "newLast",
+            type: "input",
+          },
+          {
+            message: "Choose the new employee's job tile.",
+            name: "chosenRoleId",
+            type: "list",
+            choices: titleOptions,
+          },
+          {
+            message: "Choose a manager for the new employee.",
+            name: "chosenMana",
+            type: "list",
+            choices: manOptions,
+          },
+        ])
+        .then(function (answer) {
+          const roley = answer.chosenRoleId.split(" ");
+          const managery = answer.chosenMana.split(" ");
+          connection.query(
+            `INSERT INTO employee SET ?`,
+            {
+              first_name: answer.newFirst,
+              last_name: answer.newLast,
+              role_id: roley[roley.length - 1],
+              manager_id: managery[managery.length - 1],
+            },
+            function (err) {
+              if (err) throw err;
+              console.log("\n You successfully added a new employee! \n");
+              viewEmployees();
+            }
+          );
+        });
     });
+  });
 }
 
 function updateEmployeeRole() {}
 
 askForAction();
+
+// .then(function (answer) {
+//   connection.query(`INSERT INTO employee SET ?`, {
+//     first_name: answer.newFirst,
+//     last_name: answer.newLast,
+//   });
+// });
+
+// .then(function (answer) {
+//   connection.query(`INSERT INTO role SET ?`, {
+//     title: answer.titleOptions,
+//     salary: answer.ChosenSal,
+//   });
+// });
+// });
+
+// db.getDepartments().then((departments) => {
+// const depOptions = departments.map((department) => ({
+// value: department.id,
+// name: department.name,
+// }));
