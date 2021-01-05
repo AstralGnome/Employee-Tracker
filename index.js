@@ -139,8 +139,12 @@ function addDepartment() {
   });
 }
 function addRole() {
-  connection.query("SELECT * FROM role", function (err, results) {
-    if (err) throw err;
+  db.getDepartments().then((departments) => {
+    const depList = [];
+    for (let i = 0; i < departments.length; i++) {
+      depList.push(`${departments[i].id} ${departments[i].name}`);
+    }
+
     inquirer
       .prompt([
         {
@@ -156,22 +160,22 @@ function addRole() {
         {
           message: "Choose a department for the new position.",
           name: "depId",
-          type: "input",
+          type: "list",
+          choices: depList,
         },
       ])
       .then(function (answer) {
         let newRoleName = [];
-        for (let i = 0; i < results.length; i++) {
-          newRoleName.push(results[i].title);
+        for (let i = 0; i < answer.length; i++) {
+          newRoleName.push(answer[i].title);
         }
         if (!newRoleName.includes(answer.newRole)) {
           connection.query(
             `INSERT INTO role SET ?`,
             {
-              // add inquirer questions for salary and department_id
               title: answer.newRole,
               salary: answer.chosenSal,
-              department_id: answer.depId,
+              department_id: answer.depId[0],
             },
             function (err) {
               if (err) throw err;
@@ -224,15 +228,15 @@ function addEmployee() {
           },
         ])
         .then(function (answer) {
-          const roley = answer.chosenRoleId.split(" ");
-          const managery = answer.chosenMana.split(" ");
+          const role = answer.chosenRoleId.split(" ");
+          const manager = answer.chosenMana.split(" ");
           connection.query(
             `INSERT INTO employee SET ?`,
             {
               first_name: answer.newFirst,
               last_name: answer.newLast,
-              role_id: roley[roley.length - 1],
-              manager_id: managery[managery.length - 1],
+              role_id: role[role.length - 1],
+              manager_id: manager[manager.length - 1],
             },
             function (err) {
               if (err) throw err;
